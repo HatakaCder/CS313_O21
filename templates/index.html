@@ -57,7 +57,7 @@
         <button type="button" class="btn btn-info">Show chart</button>
       </div>
       <div class="d-flex flex-row justify-content-center align-items-center p-3">
-        <canvas id="myChart" width="300" height="100" aria-label="Hello ARIA World" role="img"></canvas>
+        <canvas id="myChart" width="300" height="120" aria-label="Hello ARIA World" role="img"></canvas>
       </div>
       <div class="border-top my-4"></div>
       <div class="d-flex flex-row justify-content-end">
@@ -143,7 +143,7 @@
           datalabels: {
             anchor: 'end', // Vị trí neo của nhãn
             align: 'end', // Căn chỉnh nhãn
-            color: 'black', // Màu chữ
+            color: '#333333', // Màu chữ
             font: {
               size: 14
             },
@@ -167,7 +167,7 @@
           x: {
             ticks: {
               font: {
-                size: 14, // Kích thước font
+                size: 16, // Kích thước font
                 family: 'Arial', // Font family
                 weight: 'bold', // Font weight
                 color: 'black' // Màu sắc
@@ -177,7 +177,9 @@
           y: {
             ticks: {
               font: {
+                size: 14, // Kích thước font
                 family: 'Arial', // Font family
+                weight: 'bold', // Font weight
                 color: 'black' // Màu sắc
               }
             },
