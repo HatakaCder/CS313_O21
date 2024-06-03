@@ -55,17 +55,20 @@
         <input type="text" class="form-control w-50 me-2" id="input-data-source" placeholder="Select data source">
         <button type="button" class="btn btn-info">Show chart</button>
       </div>
-      <canvas id="myChart" width="300" height="100" aria-label="Hello ARIA World" role="img"></canvas>
+      <div class="d-flex flex-row justify-content-center align-items-center p-3">
+        <canvas id="myChart" width="300" height="120" aria-label="Hello ARIA World" role="img"></canvas>
+      </div>
+      <div class="border-top my-4"></div>
       <div class="d-flex flex-row justify-content-end">
         <select class="form-select w-50 me-2" aria-label="Detail category">
-          <option selected>Select category</option>
-          <option value="1">Category 1</option>
-          <option value="2">Category 2</option>
-          <option value="3">Category 3</option>
+          <option selected>Select cluster</option>
+          <option value="1">Cluster 1</option>
+          <option value="2">Cluster 2</option>
+          <option value="3">Cluster 3</option>
         </select>
-        <button type="button" class="btn btn-info">Show list</button>
+        <button type="button" class="btn btn-info">Show cluster detail</button>
       </div>
-      <div>
+      <div class="d-flex flex-row justify-content-center align-items-center px-3 py-3">
         <table class="table">
           <thead>
             <tr>
@@ -114,57 +117,94 @@
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
   <script>
-    // Đăng ký plugin
-    Chart.register(ChartDataLabels);
-
-    // Lấy context của canvas nơi biểu đồ sẽ được vẽ
-    var ctx = document.getElementById('myChart').getContext('2d');
-
-    const mygradient = ctx.createLinearGradient(0, 0, 0, 400);
-    mygradient.addColorStop(0, 'rgba(255, 0, 0, 1)');
-    mygradient.addColorStop(1, 'rgba(255, 255, 0, 0.5)');
-
-    // Tạo data
-    var data = {
-      labels: {{ data_keys | tojson }},
-    datasets: [{
-      label: 'Student',
-      data: {{ data_values | tojson }},
-      backgroundColor: [
-      mygradient,
-      mygradient,
-      mygradient,
-      mygradient,
-      mygradient,
-      mygradient
-    ],
-      borderColor: 'transparent',
-      borderWidth: 1
+    // Dữ liệu
+    const data = {
+      datasets: [{
+        label: 'Scatter Red',
+        data: [
+          { x: 10, y: 20 },
+          { x: 105, y: 125 },
+          { x: 120, y: 150 },
+          { x: 55, y: 36 },
+          { x: 30, y: 40 },
+        ],
+        backgroundColor: 'rgba(255, 0, 0, 0.5)', // Màu nền
+        borderColor: 'rgb(255, 0, 0)', // Màu viền
+        borderWidth: 1 // Độ dày viền
+      }, {
+        label: 'Scatter Blue',
+        data: [
+          { x: 0, y: 78 },
+          { x: 1, y: 73 },
+          { x: 0, y: 3 },
+          { x: 136, y: 20 },
+          { x: 34, y: 24 },
+        ],
+        backgroundColor: 'rgba(0, 0, 255, 0.5)', // Màu nền
+        borderColor: 'rgb(0, 0, 255)', // Màu viền
+        borderWidth: 1 // Độ dày viền
+      }, {
+        label: 'Scatter Green',
+        data: [
+          { x: 133, y: 34 },
+          { x: 120, y: 55 },
+          { x: 69, y: 113 },
+          { x: 50, y: 85 },
+          { x: 66, y: 52 },
+        ],
+        backgroundColor: 'rgba(0, 255, 0, 0.5)', // Màu nền
+        borderColor: 'rgb(0, 255, 0)', // Màu viền
+        borderWidth: 1 // Độ dày viền
       }]
     };
 
-    // Tạo một biểu đồ mới
-    var myChart = new Chart(ctx, {
-      type: 'bar', // Loại biểu đồ là bar (cột)
+    // Cấu hình
+    const config = {
+      type: 'scatter',
       data: data,
       options: {
         plugins: {
           datalabels: {
             anchor: 'end', // Vị trí neo của nhãn
             align: 'end', // Căn chỉnh nhãn
-            color: 'black', // Màu chữ
+            color: '#333333', // Màu chữ
+            font: {
+              size: 14
+            },
             formatter: function (value, context) {
               return value; // Hiển thị giá trị y
+            }
+          },
+          legend: {
+            position: 'right',
+            align: 'center'
+          },
+          title: {
+            display: true,
+            text: 'Clustering Result',
+            font: {
+              size: 26
             }
           }
         },
         scales: {
+          x: {
+            type: 'linear', // Loại trục x là linear
+            position: 'bottom'
+          },
           y: {
-            beginAtZero: true // Bắt đầu trục Y từ 0
+            type: 'linear', // Loại trục y là linear
+            position: 'left'
           }
         }
       }
-    });
+    };
+
+    // Vẽ biểu đồ
+    var myChart = new Chart(
+      document.getElementById('myChart'),
+      config
+    );
   </script>
 
 </body>
