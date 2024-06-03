@@ -55,23 +55,17 @@
         <input type="text" class="form-control w-50 me-2" id="input-data-source" placeholder="Select data source">
         <button type="button" class="btn btn-info">Show chart</button>
       </div>
-      <div class="d-flex flex-row justify-content-center align-items-center p-3">
-        <canvas id="myChart" width="300" height="100" aria-label="Hello ARIA World" role="img"></canvas>
-      </div>
-      <div class="border-top my-4"></div>
+      <canvas id="myChart" width="300" height="100" aria-label="Hello ARIA World" role="img"></canvas>
       <div class="d-flex flex-row justify-content-end">
         <select class="form-select w-50 me-2" aria-label="Detail category">
           <option selected>Select category</option>
-          <option value="1">0-10</option>
-          <option value="2">11-50</option>
-          <option value="3">51-100</option>
-          <option value="3">101-150</option>
-          <option value="3">151-200</option>
-          <option value="3">>200</option>
+          <option value="1">Category 1</option>
+          <option value="2">Category 2</option>
+          <option value="3">Category 3</option>
         </select>
         <button type="button" class="btn btn-info">Show list</button>
       </div>
-      <div class="d-flex flex-row justify-content-center align-items-center px-3 py-3">
+      <div>
         <table class="table">
           <thead>
             <tr>
@@ -127,8 +121,8 @@
     var ctx = document.getElementById('myChart').getContext('2d');
 
     const mygradient = ctx.createLinearGradient(0, 0, 0, 400);
-    mygradient.addColorStop(0, 'rgba(255, 0, 0, 0.8)');
-    mygradient.addColorStop(1, 'rgba(255, 255, 0, 0.8)');
+    mygradient.addColorStop(0, 'rgba(255, 0, 0, 1)');
+    mygradient.addColorStop(1, 'rgba(255, 255, 0, 0.5)');
 
     // Tạo data
     var data = {
@@ -159,43 +153,13 @@
             anchor: 'end', // Vị trí neo của nhãn
             align: 'end', // Căn chỉnh nhãn
             color: 'black', // Màu chữ
-            font: {
-              size: 14
-            },
             formatter: function (value, context) {
               return value; // Hiển thị giá trị y
-            }
-          },
-          legend: {
-            position: 'top',
-            align: 'end'
-          },
-          title: {
-            display: true,
-            text: 'Video watching frequency distribution',
-            font: {
-              size: 26
             }
           }
         },
         scales: {
-          x: {
-            ticks: {
-              font: {
-                size: 14, // Kích thước font
-                family: 'Arial', // Font family
-                weight: 'bold', // Font weight
-                color: 'black' // Màu sắc
-              }
-            }
-          },
           y: {
-            ticks: {
-              font: {
-                family: 'Arial', // Font family
-                color: 'black' // Màu sắc
-              }
-            },
             beginAtZero: true // Bắt đầu trục Y từ 0
           }
         }
