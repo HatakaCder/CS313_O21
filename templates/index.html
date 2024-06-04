@@ -44,10 +44,10 @@
     <div class="container-fluid d-flex col-2 m-0 p-0 bg-light border-end"> <!-- #Nav -->
       <ul class="nav flex-column">
         <li class="nav-item">
-          <a class="nav-link fw-bold" href="#">Video watching frequency distribution</a>
+          <a class="nav-link fw-bold" href="{{ url_for('home') }}">Video watching frequency distribution</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link fw-bold" href="#">Clustering</a>
+          <a class="nav-link fw-bold" href="{{ url_for('cluster') }}">Clustering</a>
         </li>
       </ul>
     </div>
@@ -61,32 +61,32 @@
       </div>
       <div class="border-top my-4"></div>
       <div class="d-flex flex-row justify-content-end">
-            <select class="form-select w-50 me-2" id="category-select" aria-label="Detail category">
-                <option selected>Select category</option>
-                <option value="0-10">0-10</option>
-                <option value="11-50">11-50</option>
-                <option value="51-100">51-100</option>
-                <option value="101-150">101-150</option>
-                <option value="151-200">151-200</option>
-                <option value=">200">>200</option>
-            </select>
-            <button type="button" class="btn btn-info" id="show-list-button">Show list</button>
-        </div>
+        <select class="form-select w-50 me-2" id="category-select" aria-label="Detail category">
+          <option selected>Select category</option>
+          <option value="0-10">0-10</option>
+          <option value="11-50">11-50</option>
+          <option value="51-100">51-100</option>
+          <option value="101-150">101-150</option>
+          <option value="151-200">151-200</option>
+          <option value=">200">>200</option>
+        </select>
+        <button type="button" class="btn btn-info" id="see-details-button" onclick="sendCategory()">See details</button>
+      </div>
       <div class="d-flex flex-row justify-content-center align-items-center px-3 py-3">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Gender</th>
-                        <th scope="col">Views count</th>
-                    </tr>
-                </thead>
-                <tbody id="table-body">
-                    <!-- Data will be appended here -->
-                </tbody>
-            </table>
-        </div>
+        <table id="details-table" class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Gender</th>
+              <th scope="col">Views count</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <!-- Data will be appended here -->
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
   <!-- #Footer -->
@@ -104,7 +104,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
-  <script>
+  <script> // Script for loading chart
     // Đăng ký plugin
     Chart.register(ChartDataLabels);
 
@@ -189,30 +189,49 @@
       }
     });
   </script>
-  <script>
-        $(document).ready(function() {
-            $('#show-list-button').click(function() {
-                var selectedCategory = $('#category-select').val();
-                $.ajax({
-                    url: '/show-list',
-                    type: 'POST',
-                    data: { category: selectedCategory },
-                    success: function(response) {
-                        var tableBody = $('#table-body');
-                        tableBody.empty();  // Clear the table
-                        response.forEach(function(row) {
-                            var tr = $('<tr></tr>');
-                            tr.append('<th scope="row">' + row.id + '</th>');
-                            tr.append('<td>' + row.name + '</td>');
-                            tr.append('<td>' + row.gender + '</td>');
-                            tr.append('<td>' + row.views_count + '</td>');
-                            tableBody.append(tr);
-                        });
-                    }
-                });
-            });
+  <script> // Script for see details table
+    function sendCategory() {
+      var selectedCategory = document.getElementById("category-select").value;
+
+      if (selectedCategory === 'Select category' || !selectedCategory) {
+        var tableBody = document.querySelector('#details-table tbody');
+        tableBody.innerHTML = ''; // Xóa dữ liệu cũ
+        alert('No category selected. Please select a category.');
+        return; // Early return to stop function execution
+      }
+
+      fetch('/send-category', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ selectedCategory: selectedCategory }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Received data:', data);
+          updateDetailsTable(data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
         });
-    </script>
+    }
+
+    function updateDetailsTable(data) {
+      var tableBody = document.querySelector('#details-table tbody');
+      tableBody.innerHTML = ''; // Xóa dữ liệu cũ
+
+      data.forEach(function (row) {
+        var newRow = '<tr>';
+        newRow += '<td>' + row.id + '</td>';
+        newRow += '<td>' + row.name + '</td>';
+        newRow += '<td>' + row.gender + '</td>';
+        newRow += '<td>' + row.num_watch_vid + '</td>';
+        newRow += '</tr>';
+        tableBody.innerHTML += newRow;
+      });
+    }
+  </script>
 </body>
 
 </html>

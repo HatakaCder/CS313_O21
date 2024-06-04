@@ -43,10 +43,10 @@
     <div class="container-fluid d-flex col-2 m-0 p-0 bg-light border-end"> <!-- #Nav -->
       <ul class="nav flex-column">
         <li class="nav-item">
-          <a class="nav-link fw-bold" href="#">Video watching frequency distribution</a>
+          <a class="nav-link fw-bold" href="{{ url_for('home') }}">Video watching frequency distribution</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link fw-bold" href="#">Clustering</a>
+          <a class="nav-link fw-bold" href="{{ url_for('cluster') }}">Clustering</a>
         </li>
       </ul>
     </div>
@@ -117,41 +117,24 @@
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 
   <script>
+    const clusters = {{ clusters | tojson }};
     // Dữ liệu
     const data = {
       datasets: [{
         label: 'Scatter Red',
-        data: [
-          { x: 10, y: 20 },
-          { x: 105, y: 125 },
-          { x: 120, y: 150 },
-          { x: 55, y: 36 },
-          { x: 30, y: 40 },
-        ],
+        data: clusters[0],
         backgroundColor: 'rgba(255, 0, 0, 0.5)', // Màu nền
         borderColor: 'rgb(255, 0, 0)', // Màu viền
         borderWidth: 1 // Độ dày viền
       }, {
         label: 'Scatter Blue',
-        data: [
-          { x: 0, y: 78 },
-          { x: 1, y: 73 },
-          { x: 0, y: 3 },
-          { x: 136, y: 20 },
-          { x: 34, y: 24 },
-        ],
+        data: clusters[1],
         backgroundColor: 'rgba(0, 0, 255, 0.5)', // Màu nền
         borderColor: 'rgb(0, 0, 255)', // Màu viền
         borderWidth: 1 // Độ dày viền
       }, {
         label: 'Scatter Green',
-        data: [
-          { x: 133, y: 34 },
-          { x: 120, y: 55 },
-          { x: 69, y: 113 },
-          { x: 50, y: 85 },
-          { x: 66, y: 52 },
-        ],
+        data: clusters[2],
         backgroundColor: 'rgba(0, 255, 0, 0.5)', // Màu nền
         borderColor: 'rgb(0, 255, 0)', // Màu viền
         borderWidth: 1 // Độ dày viền
